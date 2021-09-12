@@ -1,7 +1,7 @@
 #include "logger.h"
 #include "intrin.h"
 
-void Logger::addLog(const char *instruction, __sfu431_mask mask, int N)
+void Logger::addLog(const char *instruction, __cs295_mask mask, int N)
 {
   Log newLog;
   strcpy(newLog.instruction, instruction);

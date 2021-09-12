@@ -8,7 +8,7 @@ using namespace std;
 
 #define MAX_INST_LEN 32
 
-struct __sfu431_mask;
+struct __cs295_mask;
 
 struct Log {
   char instruction[MAX_INST_LEN];
@@ -27,7 +27,7 @@ class Logger {
     Statistics stats;
 
   public:
-    void addLog(const char * instruction, __sfu431_mask mask, int N = 0);
+    void addLog(const char * instruction, __cs295_mask mask, int N = 0);
     void printStats();
     void clearLog();
     void printLog();

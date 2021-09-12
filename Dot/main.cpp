@@ -12,7 +12,7 @@ using namespace std;
 
 #define EXP_MAX 1024
 
-Logger SFU431Logger;
+Logger cs295Logger;
 
 void usage(const char *progname);
 void initValue(int *values, int *exponents, int *output, int *gold,
@@ -69,8 +69,8 @@ int main(int argc, char *argv[]) {
     bool result_vector = verifyint(input_X, input_Y, output_vector, gold_data, SIZE);
 
     if (printLog) {
-      SFU431Logger.printLog();
-      SFU431Logger.printStats();
+      cs295Logger.printLog();
+      cs295Logger.printStats();
     }
     if (!result_vector) {
       printf("@@@ Failed!!!\n");

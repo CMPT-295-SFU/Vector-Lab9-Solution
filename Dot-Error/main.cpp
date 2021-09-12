@@ -40,44 +40,45 @@ int main(int argc, char *argv[]) {
   }
 
   printf("\n\e[1;31mDot Product Result[] = X[] * Y[] \e[0m  \n");
-    int *output_serial = new int[SIZE + VECTOR_WIDTH];
-    int *output_vector = new int[SIZE + VECTOR_WIDTH];
-
+  int *output_serial = new int[SIZE + VECTOR_WIDTH];
+  int *output_vector = new int[SIZE + VECTOR_WIDTH];
 
   // Adding padding to verify against gold_data
-    for (int i = SIZE; i < SIZE + VECTOR_WIDTH; i++) {
-      output_serial[i] = 0xbeef;
-      output_vector[i] = 0xbeef;
-    }
+  for (int i = SIZE; i < SIZE + VECTOR_WIDTH; i++) {
+    output_serial[i] = 0xbeef;
+    output_vector[i] = 0xbeef;
+  }
 
-    DotSerial(input_X, input_Y, output_serial, SIZE);
+  DotSerial(input_X, input_Y, output_serial, SIZE);
 
-    printf("\e[1;31mDot Serial \e[0m  \n");
-    bool result_serial = verifyint(input_X, input_Y, output_serial, gold_data, SIZE);
+  printf("\e[1;31mDot Serial \e[0m  \n");
+  bool result_serial =
+      verifyint(input_X, input_Y, output_serial, gold_data, SIZE);
 
-    if (!result_serial) {
-      printf("@@@ Failed!!!\n");
-      return 1;
-    } else {
-      printf("Passed!!!\n");
-    }
+  if (!result_serial) {
+    printf("@@@ Failed!!!\n");
+    return 1;
+  } else {
+    printf("Passed!!!\n");
+  }
 
-    printf("\e[1;31mDot Vector \e[0m  \n");
-    DotVector(input_X, input_Y, output_vector, SIZE);
+  printf("\e[1;31mDot Vector \e[0m  \n");
+  DotVector(input_X, input_Y, output_vector, SIZE);
 
-    bool result_vector = verifyint(input_X, input_Y, output_vector, gold_data, SIZE);
+  bool result_vector =
+      verifyint(input_X, input_Y, output_vector, gold_data, SIZE);
 
-    if (printLog) {
-      cs295Logger.printLog();
-      cs295Logger.printStats();
-    }
-    if (!result_vector) {
-      printf("@@@ Failed!!!\n");
-      return 1;
-    } else {
-      printf("Passed!!!\n");
-      return 0;
-    }
+  if (printLog) {
+    cs295Logger.printLog();
+    cs295Logger.printStats();
+  }
+  if (!result_vector) {
+    printf("@@@ Failed!!!\n");
+    return 1;
+  } else {
+    printf("Passed!!!\n");
+    return 0;
+  }
 }
 
 void usage(const char *progname) {
