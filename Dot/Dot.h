@@ -40,5 +40,10 @@ void DotVector(int x[], int y[], int output[], int N) {
 
     // Write results back to memory
     _sfu431_vstore_int(output + i, result_v, maskAll);
+
+    printf("Iteration %d processing %d to %d \n", i, i, i+VECTOR_WIDTH);
+    SFU431Logger.printLog();
+    SFU431Logger.clearLog();
   }
+  printf("Done Vector");
 }

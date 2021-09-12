@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <algorithm>
-#include "ReluEXT.h"
+#include "Dot.h"
 #include "dataset.h"
 #include "helpers.h"
 #include "intrin.h"
@@ -39,42 +39,45 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  printf("\n\e[1;31mRELU \e[0m  \n");
-  int *output_serial = new int[SIZE + VECTOR_WIDTH];
-  int *output_vector = new int[SIZE + VECTOR_WIDTH];
-  ReluSerial(input_data, output_serial, SIZE);
-  ReluVector(input_data, output_vector, SIZE);
+  printf("\n\e[1;31mDot Product Result[] = X[] * Y[] \e[0m  \n");
+    int *output_serial = new int[SIZE + VECTOR_WIDTH];
+    int *output_vector = new int[SIZE + VECTOR_WIDTH];
 
-  for (int i = SIZE; i < SIZE + VECTOR_WIDTH; i++) {
-    output_serial[i] = 514703087;
-    output_vector[i] = 514703087;
-  }
 
-  printf("\e[1;31mRelu Serial \e[0m  \n");
-  bool result_serial = verifyint(input_data, output_serial, gold, SIZE);
+  // Adding padding to verify against gold_data
+    for (int i = SIZE; i < SIZE + VECTOR_WIDTH; i++) {
+      output_serial[i] = 0xbeef;
+      output_vector[i] = 0xbeef;
+    }
 
-  if (!result_serial) {
-    printf("@@@ Failed!!!\n");
-    return 1;
-  } else {
-    printf("Passed!!!\n");
-  }
+    DotSerial(input_X, input_Y, output_serial, SIZE);
 
-  printf("\e[1;31mRelu Vector \e[0m  \n");
-  bool result_vector = verifyint(input_data, output_vector, gold, SIZE);
+    printf("\e[1;31mDot Serial \e[0m  \n");
+    bool result_serial = verifyint(input_X, input_Y, output_serial, gold_data, SIZE);
 
-  if (printLog) {
-    SFU431Logger.printLog();
-    SFU431Logger.printStats();
-  }
+    if (!result_serial) {
+      printf("@@@ Failed!!!\n");
+      return 1;
+    } else {
+      printf("Passed!!!\n");
+    }
 
-  if (!result_vector) {
-    printf("@@@ Failed!!!\n");
-    return 1;
-  } else {
-    printf("Passed!!!\n");
-    return 0;
-  }
+    printf("\e[1;31mDot Vector \e[0m  \n");
+    DotVector(input_X, input_Y, output_vector, SIZE);
+
+    bool result_vector = verifyint(input_X, input_Y, output_vector, gold_data, SIZE);
+
+    if (printLog) {
+      SFU431Logger.printLog();
+      SFU431Logger.printStats();
+    }
+    if (!result_vector) {
+      printf("@@@ Failed!!!\n");
+      return 1;
+    } else {
+      printf("Passed!!!\n");
+      return 0;
+    }
 }
 
 void usage(const char *progname) {

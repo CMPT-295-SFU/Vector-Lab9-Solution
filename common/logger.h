@@ -29,6 +29,7 @@ class Logger {
   public:
     void addLog(const char * instruction, __sfu431_mask mask, int N = 0);
     void printStats();
+    void clearLog();
     void printLog();
 };
 

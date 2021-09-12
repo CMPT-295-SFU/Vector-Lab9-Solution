@@ -51,3 +51,7 @@ void Logger::printLog()
     printf("\n");
   }
 }
+
+void Logger::clearLog() {
+  log.clear();
+}
