@@ -131,12 +131,14 @@ void _cs295_vload_int(__cs295_vec_int &dest, int *src, __cs295_mask &mask) {
 }
 
 template <typename T>
-void _cs295_vload_seg(__cs295_vec<T> dest[], T *src, __cs295_mask &mask,
-                       const int fields) {
-  for (int i = 0; i < fields; i++) {
-    for (int j = 0; j < VECTOR_WIDTH; j++) {
+void _cs295_vload_seg(__cs295_vec<T> dest[], T *src,
+                      __cs295_mask &mask, const int fields) {
+  T* base = src;
+  for (int j = 0; j < VECTOR_WIDTH; j++) {
+    for (int i = 0; i < fields; i++) {
       dest[i].value[j] =
-          mask.value[j] ? src[(i * fields) + j] : dest[i].value[j];
+          mask.value[j] ? *base : dest[i].value[j];
+      base = base + 1;
     }
     cs295Logger.addLog("vlseg", mask, VECTOR_WIDTH);
   }
