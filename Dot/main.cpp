@@ -40,13 +40,13 @@ int main(int argc, char *argv[]) {
   }
 
   printf("\n\e[1;31mDot Product Result[] = X[] * Y[] \e[0m  \n");
-  if (SIZE % VECTOR_WIDTH == 0) {
-    int *output_serial = new int[SIZE + VECTOR_WIDTH];
-    int *output_vector = new int[SIZE + VECTOR_WIDTH];
+  if (SIZE % VLEN == 0) {
+    int *output_serial = new int[SIZE + VLEN];
+    int *output_vector = new int[SIZE + VLEN];
 
 
   // Adding padding to verify against gold_data
-    for (int i = SIZE; i < SIZE + VECTOR_WIDTH; i++) {
+    for (int i = SIZE; i < SIZE + VLEN; i++) {
       output_serial[i] = 0xbeef;
       output_vector[i] = 0xbeef;
     }
@@ -81,9 +81,9 @@ int main(int argc, char *argv[]) {
     }
   } else {
     printf(
-        "SIZE must be multiple of VECTOR_WIDTH for this problem (VECTOR_WIDTH "
+        "SIZE must be multiple of VLEN for this problem (VLEN "
         "is %d)\n",
-        VECTOR_WIDTH);
+        VLEN);
     return 1;
   }
 }

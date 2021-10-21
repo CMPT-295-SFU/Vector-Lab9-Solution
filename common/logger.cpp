@@ -22,7 +22,7 @@ void Logger::addLog(const char *instruction, __cs295_mask mask, int N)
 void Logger::printStats()
 {
   printf("****************** Printing Vector Unit Statistics *******************\n");
-  printf("Vector Width:              %d\n", VECTOR_WIDTH);
+  printf("Vector Width:              %d\n", VLEN);
   printf("Total Vector Instructions: %lld\n", stats.total_instructions);
   printf("Vector Utilization:        %f%%\n", (double)stats.utilized_lane / stats.total_lane * 100);
   printf("Utilized Vector Lanes:     %lld\n", stats.utilized_lane);
@@ -37,7 +37,7 @@ void Logger::printLog()
   for (int i = 0; i < log.size(); i++)
   {
     printf("%12s | ", log[i].instruction);
-    for (int j = 0; j < VECTOR_WIDTH; j++)
+    for (int j = 0; j < VLEN; j++)
     {
       if (log[i].mask & (((unsigned long long)1) << j))
       {

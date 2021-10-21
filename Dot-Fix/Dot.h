@@ -18,25 +18,25 @@ void DotVector(int x[], int y[], int output[], int N) {
   __cs295_vec_int x_v, y_v;
   __cs295_vec_int result_v;
 
-  // Check the loop bound; it increments in VECTOR_WIDTH segments
-  // It considers the array a VECTOR_WIDTH elements at a time.
-  for (int i = 0; i < N; i += VECTOR_WIDTH) {
+  // Check the loop bound; it increments in VLEN segments
+  // It considers the array a VLEN elements at a time.
+  for (int i = 0; i < N; i += VLEN) {
     
-    int width = VECTOR_WIDTH;    
+    int width = VLEN;    
     // Check if final iteration. 
-    if (N - i < VECTOR_WIDTH) {
+    if (N - i < VLEN) {
       width = N - i; // Find number of elements left to process
     }
-    // Activate VECTOR_WIDTH lanes
+    // Activate VLEN lanes
     __cs295_mask maskAll = _cs295_init_ones(width);
 
-    // Both X and Y pointers move VECTOR_WIDTH at a time. 
+    // Both X and Y pointers move VLEN at a time. 
 
-    // Load VECTOR_WIDTH elements from X; values from contiguous memory
+    // Load VLEN elements from X; values from contiguous memory
     // addresses
     _cs295_vload_int(x_v, x + i, maskAll);  // x = values[i];
 
-    // Load VECTOR_WIDTH elements from Y; values from contiguous memory
+    // Load VLEN elements from Y; values from contiguous memory
     // addresses.    
     _cs295_vload_int(y_v, y + i, maskAll);  // x = values[i];
 
@@ -45,7 +45,7 @@ void DotVector(int x[], int y[], int output[], int N) {
 
     // Write results back to memory
     _cs295_vstore_int(output + i, result_v, maskAll);
-    printf("Iteration %d processing %d to %d \n", i, i, i + VECTOR_WIDTH);
+    printf("Iteration %d processing %d to %d \n", i, i, i + VLEN);
     cs295Logger.printLog();
     cs295Logger.clearLog();
   }

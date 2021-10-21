@@ -7,7 +7,7 @@
 
 bool verifyint(int *x, int *y, int *output, int *gold, int N) {
   int incorrect = -1;
-  for (int i = 0; i < N + VECTOR_WIDTH; i++) {
+  for (int i = 0; i < N + VLEN; i++) {
     if (output[i] != gold[i]) {
       incorrect = i;
       break;

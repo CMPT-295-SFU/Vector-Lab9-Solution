@@ -1,5 +1,5 @@
 // Define vector unit width here
-#define VECTOR_WIDTH 8
+#define VLEN 8
 
 #ifndef cs295INTRIN_H_
 #define cs295INTRIN_H_
@@ -16,7 +16,7 @@ extern Logger cs295Logger;
 
 template <typename T>
 struct __cs295_vec {
-  T value[VECTOR_WIDTH];
+  T value[VLEN];
 };
 
 // Declare a mask with __cs295_mask
@@ -33,7 +33,7 @@ struct __cs295_mask : __cs295_vec<bool> {};
 //***********************
 
 // Return a mask initialized to 1 in the first N lanes and 0 in the others
-__cs295_mask _cs295_init_ones(int first = VECTOR_WIDTH);
+__cs295_mask _cs295_init_ones(int first = VLEN);
 
 // Return the inverse of maska
 __cs295_mask _cs295_mask_not(__cs295_mask &maska);

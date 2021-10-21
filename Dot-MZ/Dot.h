@@ -22,21 +22,21 @@ void DotVector(int x[], int y[], int output[], int N) {
 
   __cs295_vec_int zeros = _cs295_vset_int(0);
 
-  for (int i = 0; i < N; i += VECTOR_WIDTH) {
+  for (int i = 0; i < N; i += VLEN) {
    
     // Disable non zeros.
     // Find out lanes for which either X or Y are 0.
 
-    // Load VECTOR_WIDTH elements from X; values from contiguous memory
+    // Load VLEN elements from X; values from contiguous memory
     // Is x[i] == 0 ?
 
-    __cs295_mask maskAll = _cs295_init_ones(VECTOR_WIDTH);
+    __cs295_mask maskAll = _cs295_init_ones(VLEN);
 
     _cs295_vload_int(x_v, x + i, maskAll);  // x = values[i];
     __cs295_mask mask_x_zeros;
     _cs295_veq_int(mask_x_zeros, x_v, zeros, maskAll);
 
-    // Load VECTOR_WIDTH elements from Y; values from contiguous memory
+    // Load VLEN elements from Y; values from contiguous memory
     // Is y[i] == 0 ?
 
     _cs295_vload_int(y_v, y + i, maskAll);  // x = values[i];

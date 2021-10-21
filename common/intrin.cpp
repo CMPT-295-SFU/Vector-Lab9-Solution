@@ -7,7 +7,7 @@
 
 __cs295_mask _cs295_init_ones(int first) {
   __cs295_mask mask;
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     mask.value[i] = (i < first) ? true : false;
   }
   return mask;
@@ -15,47 +15,47 @@ __cs295_mask _cs295_init_ones(int first) {
 
 __cs295_mask _cs295_mask_not(__cs295_mask &maska) {
   __cs295_mask resultMask;
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     resultMask.value[i] = !maska.value[i];
   }
-  cs295Logger.addLog("masknot", _cs295_init_ones(), VECTOR_WIDTH);
+  cs295Logger.addLog("masknot", _cs295_init_ones(), VLEN);
   return resultMask;
 }
 
 __cs295_mask _cs295_mask_or(__cs295_mask &maska, __cs295_mask &maskb) {
   __cs295_mask resultMask;
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     resultMask.value[i] = maska.value[i] | maskb.value[i];
   }
-  cs295Logger.addLog("maskor", _cs295_init_ones(), VECTOR_WIDTH);
+  cs295Logger.addLog("maskor", _cs295_init_ones(), VLEN);
   return resultMask;
 }
 
 __cs295_mask _cs295_mask_and(__cs295_mask &maska, __cs295_mask &maskb) {
   __cs295_mask resultMask;
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     resultMask.value[i] = maska.value[i] && maskb.value[i];
   }
-  cs295Logger.addLog("maskand", _cs295_init_ones(), VECTOR_WIDTH);
+  cs295Logger.addLog("maskand", _cs295_init_ones(), VLEN);
   return resultMask;
 }
 
 int _cs295_cntbits(__cs295_mask &maska) {
   int count = 0;
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     if (maska.value[i])
       count++;
   }
-  cs295Logger.addLog("cntbits", _cs295_init_ones(), VECTOR_WIDTH);
+  cs295Logger.addLog("cntbits", _cs295_init_ones(), VLEN);
   return count;
 }
 
 template <typename T>
 void _cs295_vset(__cs295_vec<T> &vecResult, T value, __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     vecResult.value[i] = mask.value[i] ? value : vecResult.value[i];
   }
-  cs295Logger.addLog("vset", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("vset", mask, VLEN);
 }
 
 template void _cs295_vset<float>(__cs295_vec_float &vecResult, float value,
@@ -88,10 +88,10 @@ __cs295_vec_int _cs295_vset_int(int value) {
 template <typename T>
 void _cs295_vmove(__cs295_vec<T> &dest, __cs295_vec<T> &src,
                    __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     dest.value[i] = mask.value[i] ? src.value[i] : dest.value[i];
   }
-  cs295Logger.addLog("vmove", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("vmove", mask, VLEN);
 }
 
 template void _cs295_vmove<float>(__cs295_vec_float &dest,
@@ -111,10 +111,10 @@ void _cs295_vmove_int(__cs295_vec_int &dest, __cs295_vec_int &src,
 
 template <typename T>
 void _cs295_vload(__cs295_vec<T> &dest, T *src, __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     dest.value[i] = mask.value[i] ? src[i] : dest.value[i];
   }
-  cs295Logger.addLog("vload", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("vload", mask, VLEN);
 }
 
 template void _cs295_vload<float>(__cs295_vec_float &dest, float *src,
@@ -134,13 +134,13 @@ template <typename T>
 void _cs295_vload_seg(__cs295_vec<T> dest[], T *src,
                       __cs295_mask &mask, const int fields) {
   T* base = src;
-  for (int j = 0; j < VECTOR_WIDTH; j++) {
+  for (int j = 0; j < VLEN; j++) {
     for (int i = 0; i < fields; i++) {
       dest[i].value[j] =
           mask.value[j] ? *base : dest[i].value[j];
       base = base + 1;
     }
-    cs295Logger.addLog("vlseg", mask, VECTOR_WIDTH);
+    cs295Logger.addLog("vlseg", mask, VLEN);
   }
 }
 
@@ -156,10 +156,10 @@ void _cs295_vload_seg_int(__cs295_vec_int dest[], int *src,
 
 template <typename T>
 void _cs295_vstore(T *dest, __cs295_vec<T> &src, __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     dest[i] = mask.value[i] ? src.value[i] : dest[i];
   }
-  cs295Logger.addLog("vstore", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("vstore", mask, VLEN);
 }
 
 template void _cs295_vstore<float>(float *dest, __cs295_vec_float &src,
@@ -178,11 +178,11 @@ void _cs295_vstore_int(int *dest, __cs295_vec_int &src, __cs295_mask &mask) {
 template <typename T>
 void _cs295_vadd(__cs295_vec<T> &vecResult, __cs295_vec<T> &veca,
                   __cs295_vec<T> &vecb, __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     vecResult.value[i] =
         mask.value[i] ? (veca.value[i] + vecb.value[i]) : vecResult.value[i];
   }
-  cs295Logger.addLog("vadd", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("vadd", mask, VLEN);
 }
 
 template void _cs295_vadd<float>(__cs295_vec_float &vecResult,
@@ -205,11 +205,11 @@ void _cs295_vadd_int(__cs295_vec_int &vecResult, __cs295_vec_int &veca,
 template <typename T>
 void _cs295_vsub(__cs295_vec<T> &vecResult, __cs295_vec<T> &veca,
                   __cs295_vec<T> &vecb, __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     vecResult.value[i] =
         mask.value[i] ? (veca.value[i] - vecb.value[i]) : vecResult.value[i];
   }
-  cs295Logger.addLog("vsub", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("vsub", mask, VLEN);
 }
 
 template void _cs295_vsub<float>(__cs295_vec_float &vecResult,
@@ -232,11 +232,11 @@ void _cs295_vsub_int(__cs295_vec_int &vecResult, __cs295_vec_int &veca,
 template <typename T>
 void _cs295_vmult(__cs295_vec<T> &vecResult, __cs295_vec<T> &veca,
                    __cs295_vec<T> &vecb, __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     vecResult.value[i] =
         mask.value[i] ? (veca.value[i] * vecb.value[i]) : vecResult.value[i];
   }
-  cs295Logger.addLog("vmult", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("vmult", mask, VLEN);
 }
 
 template void _cs295_vmult<float>(__cs295_vec_float &vecResult,
@@ -260,24 +260,24 @@ void _cs295_vmult_int(__cs295_vec_int &vecResult, __cs295_vec_int &veca,
 template <typename T>
 void _cs295_vdiv(__cs295_vec<T> &vecResult, __cs295_vec<T> &veca,
                   __cs295_vec<T> &vecb, __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     vecResult.value[i] =
         mask.value[i] ? (veca.value[i] / vecb.value[i]) : vecResult.value[i];
   }
-  cs295Logger.addLog("vdiv", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("vdiv", mask, VLEN);
 }
 
 void _cs295_vshiftright_int(__cs295_vec_int &vecResult,
                              __cs295_vec_int &veca, __cs295_vec_int &vecb,
                              __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++)
+  for (int i = 0; i < VLEN; i++)
     vecResult.value[i] =
         mask.value[i] ? (veca.value[i] >> vecb.value[i]) : vecResult.value[i];
 }
 
 void _cs295_vbitand_int(__cs295_vec_int &vecResult, __cs295_vec_int &veca,
                          __cs295_vec_int &vecb, __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++)
+  for (int i = 0; i < VLEN; i++)
     vecResult.value[i] =
         mask.value[i] ? (veca.value[i] & vecb.value[i]) : vecResult.value[i];
 }
@@ -302,11 +302,11 @@ void _cs295_vdiv_int(__cs295_vec_int &vecResult, __cs295_vec_int &veca,
 template <typename T>
 void _cs295_vabs(__cs295_vec<T> &vecResult, __cs295_vec<T> &veca,
                   __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     vecResult.value[i] =
         mask.value[i] ? (abs(veca.value[i])) : vecResult.value[i];
   }
-  cs295Logger.addLog("vabs", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("vabs", mask, VLEN);
 }
 
 template void _cs295_vabs<float>(__cs295_vec_float &vecResult,
@@ -327,11 +327,11 @@ void _cs295_vabs_int(__cs295_vec_int &vecResult, __cs295_vec_int &veca,
 template <typename T>
 void _cs295_vgt(__cs295_mask &maskResult, __cs295_vec<T> &veca,
                  __cs295_vec<T> &vecb, __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     maskResult.value[i] =
         mask.value[i] ? (veca.value[i] > vecb.value[i]) : maskResult.value[i];
   }
-  cs295Logger.addLog("vgt", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("vgt", mask, VLEN);
 }
 
 template void _cs295_vgt<float>(__cs295_mask &maskResult,
@@ -353,11 +353,11 @@ void _cs295_vgt_int(__cs295_mask &maskResult, __cs295_vec_int &veca,
 template <typename T>
 void _cs295_vlt(__cs295_mask &maskResult, __cs295_vec<T> &veca,
                  __cs295_vec<T> &vecb, __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     maskResult.value[i] =
         mask.value[i] ? (veca.value[i] < vecb.value[i]) : maskResult.value[i];
   }
-  cs295Logger.addLog("vlt", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("vlt", mask, VLEN);
 }
 
 template void _cs295_vlt<float>(__cs295_mask &maskResult,
@@ -379,11 +379,11 @@ void _cs295_vlt_int(__cs295_mask &maskResult, __cs295_vec_int &veca,
 template <typename T>
 void _cs295_veq(__cs295_mask &maskResult, __cs295_vec<T> &veca,
                  __cs295_vec<T> &vecb, __cs295_mask &mask) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     maskResult.value[i] =
         mask.value[i] ? (veca.value[i] == vecb.value[i]) : maskResult.value[i];
   }
-  cs295Logger.addLog("veq", mask, VECTOR_WIDTH);
+  cs295Logger.addLog("veq", mask, VLEN);
 }
 
 template void _cs295_veq<float>(__cs295_mask &maskResult,
@@ -404,7 +404,7 @@ void _cs295_veq_int(__cs295_mask &maskResult, __cs295_vec_int &veca,
 
 template <typename T>
 void _cs295_hadd(__cs295_vec<T> &vecResult, __cs295_vec<T> &vec) {
-  for (int i = 0; i < VECTOR_WIDTH / 2; i++) {
+  for (int i = 0; i < VLEN / 2; i++) {
     T result = vec.value[2 * i] + vec.value[2 * i + 1];
     vecResult.value[2 * i] = result;
     vecResult.value[2 * i + 1] = result;
@@ -430,9 +430,9 @@ void _cs295_hadd_int(__cs295_vec_int &vecResult,
 
 template <typename T>
 void _cs295_interleave(__cs295_vec<T> &vecResult, __cs295_vec<T> &vec) {
-  for (int i = 0; i < VECTOR_WIDTH; i++) {
+  for (int i = 0; i < VLEN; i++) {
     int index =
-        i < VECTOR_WIDTH / 2 ? (2 * i) : (2 * (i - VECTOR_WIDTH / 2) + 1);
+        i < VLEN / 2 ? (2 * i) : (2 * (i - VLEN / 2) + 1);
     vecResult.value[i] = vec.value[index];
   }
 }
